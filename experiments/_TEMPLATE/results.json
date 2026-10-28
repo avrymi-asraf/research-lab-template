@@ -1,0 +1,23 @@
+{
+  "exp_id": "EXP-XXX",
+  "target_repo": "example-agent-repo",
+  "base_commit": null,
+  "exp_commit": null,
+  "timestamp": null,
+  "guard_passed": null,
+  "scope_check_passed": null,
+  "primary_metric": "pass_at_1",
+  "baseline_metrics": {
+    "pass_at_1": 0.64,
+    "p95_latency_sec": 3.2
+  },
+  "candidate_metrics": {
+    "pass_at_1": null,
+    "p95_latency_sec": null
+  },
+  "delta": {
+    "pass_at_1": null,
+    "p95_latency_sec": null
+  },
+  "verdict": "PENDING"
+}

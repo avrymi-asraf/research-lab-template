@@ -1,0 +1,23 @@
+{
+  "exp_id": "EXP-000-baseline-example",
+  "target_repo": "example-agent-repo",
+  "base_commit": "init-baseline",
+  "exp_commit": "init-baseline",
+  "timestamp": "2026-10-28T16:30:00Z",
+  "guard_passed": true,
+  "scope_check_passed": true,
+  "primary_metric": "pass_at_1",
+  "baseline_metrics": {
+    "pass_at_1": 0.64,
+    "p95_latency_sec": 3.2
+  },
+  "candidate_metrics": {
+    "pass_at_1": 0.64,
+    "p95_latency_sec": 3.2
+  },
+  "delta": {
+    "pass_at_1": 0.0,
+    "p95_latency_sec": 0.0
+  },
+  "verdict": "BASELINE"
+}

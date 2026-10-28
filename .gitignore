@@ -1,0 +1,15 @@
+# External target repositories and isolated experiment worktrees
+# Managed by scripts/lab.py — never tracked in the lab control repository
+.targets/
+repos/
+worktrees/
+
+# Python / OS artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.DS_Store
+*.log
+.env
