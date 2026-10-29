@@ -28,6 +28,7 @@ Run a disciplined, compounding research loop across external codebases without p
 4. **`.targets/` (Git-Ignored Execution Sandboxes):**
    - Base clones live in `.targets/repos/<repo>`.
    - Active experiments run in isolated worktrees at `.targets/worktrees/EXP-XXX-<slug>/` on branch `exp/EXP-XXX-<slug>`.
+   - Skills across the lab and all experiment instances are managed via `npx skills` and locked in `skills-lock.json`: each instance holds a **static copy** in `.agents/skills/<skill>/` and relative **symlinks** in `.claude/skills/<skill> -> ../../.agents/skills/<skill>`. `lab.py new-exp` provisions this layout into every worktree so subagents have the full shared skill set locally.
 
 ## Step-by-Step Cyclic Workflow
 
@@ -35,8 +36,8 @@ Run a disciplined, compounding research loop across external codebases without p
 
 1. Run drift detection and build the pre-planning context pack:
    ```bash
-   python3 scripts/lab.py check-drift
-   python3 scripts/lab.py context-pack
+   uv run scripts/lab.py check-drift
+   uv run scripts/lab.py context-pack
    ```
 2. If `check-drift` flags any `wiki-llm/systems/*.md` page as `DRIFTED!`, inspect `git diff` in `.targets/repos/<repo>`, update the system page, and bump its `Fingerprint: git:<new_sha>`.
 3. Read `wiki-llm/query_pack.md` (or `JOURNAL.md` + `wiki-llm/index.md` + `wiki-llm/gap_map.md`) to identify the highest-priority open gap (`G*`) or `Spark` (`SPARK-*`).
@@ -49,7 +50,7 @@ This step deserves the most thought in the loop. Aim for deep, creative, non-obv
 2. Cross-check your candidate hypothesis against Section 4 of `JOURNAL.md` (`Anti-Repeat Banlist`) so you never repeat a refuted experiment.
 3. Scaffold the experiment directory and its isolated `git worktree`:
    ```bash
-   python3 scripts/lab.py new-exp --id EXP-XXX --repo <target-repo> --title "<short-slug>"
+   uv run scripts/lab.py new-exp --id EXP-XXX --repo <target-repo> --title "<short-slug>"
    ```
 4. Edit `experiments/EXP-XXX-<short-slug>/plan.md` to specify:
    - The exact mechanistic hypothesis and linked gap (`G1`, `SPARK-01`), plus the alternatives you considered and rejected.
@@ -63,7 +64,7 @@ This step deserves the most thought in the loop. Aim for deep, creative, non-obv
 2. Apply one focused, atomic experimental change **in the established experiment language**: reuse the same concepts, names, extension points, and flow as previous experiments, so only the hypothesis differs. Commit it to the `exp/EXP-XXX-<short-slug>` branch.
 3. Execute the mechanical verification harness:
    ```bash
-   python3 scripts/lab.py evaluate --exp EXP-XXX
+   uv run scripts/lab.py evaluate --exp EXP-XXX
    ```
    This verifies that no `forbidden_scope` files were touched, runs `guard_cmd`, runs `verify_cmd`, exports `patch.diff`, and updates `results.json`.
 4. If the run fails due to an environment or syntax issue, fix and retry up to 3 times before marking `INFRA_INCONCLUSIVE`.
@@ -78,14 +79,14 @@ This step deserves the most thought in the loop. Aim for deep, creative, non-obv
    - Fill out the mandatory **`Spark`** section proposing 1-2 concrete follow-up hypotheses based on the error analysis.
 2. Record the verdict into `JOURNAL.md`, `results.json`, and `wiki-llm/log.md`:
    ```bash
-   python3 scripts/lab.py record-verdict --exp EXP-XXX --verdict <VERDICT> --metric-delta "<delta>" --summary "<one-line-lesson>"
+   uv run scripts/lab.py record-verdict --exp EXP-XXX --verdict <VERDICT> --metric-delta "<delta>" --summary "<one-line-lesson>"
    ```
 3. Update `wiki-llm/` (delegate this to a wiki-maintainer subagent when available: hand it `postmortem.md` + `results.json`, then review what it changed):
    - Weave the new empirical finding into `wiki-llm/findings/<topic>.md` and update `wiki-llm/gap_map.md` and `wiki-llm/index.md`.
    - If `HYPOTHESIS_REFUTED`, add the refuted pattern and boundary conditions to `JOURNAL.md` (`Anti-Repeat Banlist`).
 4. Clean up the temporary worktree once `patch.diff` is saved:
    ```bash
-   python3 scripts/lab.py cleanup-worktree --exp EXP-XXX
+   uv run scripts/lab.py cleanup-worktree --exp EXP-XXX
    ```
 
 ## Gotchas

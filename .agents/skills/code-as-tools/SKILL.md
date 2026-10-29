@@ -56,7 +56,7 @@ Research systems require two complementary entry points serving two different us
   - Keep single calls interruptible and cheap enough to iterate on; expose the granularity that lets
     the user (or agent) run one piece, look at it, and continue.
   - If a CLI is wanted, it is a thin shell over the same tools — never the only way in.
-  - **Colab Kernel Self-Bootstrapping & Secrets**: If notebooks are shared or run on Google Colab, include an auto-detecting setup block (`IN_COLAB = "google.colab" in sys.modules or os.path.exists("/content")`) that clones the repository and installs the package in editable mode (`pip install -q -e .`). In addition, automatically load API credentials from Colab Secrets (`google.colab.userdata.get(...)`) and sync them to `os.environ` (e.g. `HF_TOKEN`, `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `WANDB_API_KEY`) so that third-party tools and API clients authenticate seamlessly without manual user configuration or hardcoding.
+  - **Colab Kernel Self-Bootstrapping & Secrets**: If notebooks are shared or run on Google Colab, include an auto-detecting setup block (`IN_COLAB = "google.colab" in sys.modules or os.path.exists("/content")`) that clones the repository and installs the package in editable mode (`uv pip install --system -q -e .`). In addition, automatically load API credentials from Colab Secrets (`google.colab.userdata.get(...)`) and sync them to `os.environ` (e.g. `HF_TOKEN`, `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `WANDB_API_KEY`) so that third-party tools and API clients authenticate seamlessly without manual user configuration or hardcoding.
 
 **7. Stage-by-Stage Visualization.**
 In research and data exploration, qualitative visual inspection is as critical as quantitative metrics.
@@ -78,7 +78,7 @@ Before writing code, and again before adding to an existing set, ask explicitly:
 2. Does this new piece fit logically into the existing set — or does the set need to change to accommodate it?
 3. Can it really be used properly in a notebook, as it stands?
 
-If (2) says the set needs to change, say so rather than bolting the new piece on.
+If (2) says the set needs to change, say so rather than bolting the new piece on. In a multi-experiment research lab, the toolset is part of the shared `Experiment Language` across experiments: an individual experiment must reuse or parameterize the existing tools rather than redesigning the toolset mid-experiment, unless changing the toolset itself is the explicit hypothesis in `plan.md`.
 If (3) fails, the design is wrong — fix it before implementing.
 
 ## Applying it

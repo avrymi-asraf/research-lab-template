@@ -242,6 +242,42 @@ def resolve_exp_dir(exp_id: str) -> Path:
     return matches[0]
 
 
+def provision_static_skills(wt_path: Path, repo_path: Path) -> None:
+    """Ensure skills-lock.json, static .agents/skills/ copies, and .claude/skills/ symlinks exist in a worktree."""
+    lock_src = LAB_ROOT / "skills-lock.json"
+    if lock_src.exists() and not (wt_path / "skills-lock.json").exists():
+        shutil.copy2(lock_src, wt_path / "skills-lock.json")
+
+    src_agents_skills = LAB_ROOT / ".agents" / "skills"
+    dst_agents_skills = wt_path / ".agents" / "skills"
+    dst_claude_skills = wt_path / ".claude" / "skills"
+    if src_agents_skills.exists():
+        dst_agents_skills.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(src_agents_skills, dst_agents_skills, symlinks=False, dirs_exist_ok=True)
+        dst_claude_skills.mkdir(parents=True, exist_ok=True)
+        for skill_dir in sorted(dst_agents_skills.iterdir()):
+            if not skill_dir.is_dir():
+                continue
+            link_path = dst_claude_skills / skill_dir.name
+            if not link_path.exists() and not link_path.is_symlink():
+                link_path.symlink_to(Path("../../.agents/skills") / skill_dir.name)
+
+    exclude_path = repo_path / ".git" / "info" / "exclude"
+    if exclude_path.parent.exists():
+        existing = exclude_path.read_text(encoding="utf-8") if exclude_path.exists() else ""
+        added = []
+        for pattern in (".agents/", ".claude/", "skills-lock.json"):
+            if pattern not in existing.splitlines():
+                added.append(pattern)
+        if added:
+            with exclude_path.open("a", encoding="utf-8") as f:
+                if existing and not existing.endswith("\n"):
+                    f.write("\n")
+                f.write("# Lab-provisioned static skills (do not commit to target repo)\n")
+                for pattern in added:
+                    f.write(f"{pattern}\n")
+
+
 def cmd_new_exp(args: argparse.Namespace) -> None:
     slug = re.sub(r"[^a-zA-Z0-9_-]+", "-", args.title.strip().lower()).strip("-")
     folder_name = f"{args.id}-{slug}" if not args.id.endswith(slug) else args.id
@@ -257,8 +293,8 @@ def cmd_new_exp(args: argparse.Namespace) -> None:
     repo_cfg = repos.get(args.repo, {})
     base_branch = args.base_branch or repo_cfg.get("default_branch", "main")
     exp_branch = f"exp/{folder_name}"
-    guard_cmd = repo_cfg.get("guard_cmd", "pytest -q")
-    verify_cmd = repo_cfg.get("verify_cmd", "python3 eval.py")
+    guard_cmd = repo_cfg.get("guard_cmd", "uv run pytest -q")
+    verify_cmd = repo_cfg.get("verify_cmd", "uv run eval.py")
 
     # Populate plan.md template placeholders
     plan_path = exp_dir / "plan.md"
@@ -271,8 +307,8 @@ def cmd_new_exp(args: argparse.Namespace) -> None:
         .replace("base_branch: main", f"base_branch: {base_branch}")
         .replace("exp_branch: exp/EXP-XXX", f"exp_branch: {exp_branch}")
         .replace("`EXP-XXX` — [Title]", f"`{folder_name}` — {args.title}")
-        .replace('guard_cmd: "pytest tests/unit -q"', f'guard_cmd: "{guard_cmd}"')
-        .replace('verify_cmd: "python3 eval/run_bench.py --output-json"', f'verify_cmd: "{verify_cmd}"')
+        .replace('guard_cmd: "uv run pytest tests/unit -q"', f'guard_cmd: "{guard_cmd}"')
+        .replace('verify_cmd: "uv run eval/run_bench.py --output-json"', f'verify_cmd: "{verify_cmd}"')
     )
     plan_path.write_text(plan_text, encoding="utf-8")
 
@@ -291,7 +327,8 @@ def cmd_new_exp(args: argparse.Namespace) -> None:
             capture_output=True, text=True, check=False
         )
         base_sha = sha_proc.stdout.strip() or "unknown"
-        print(f"[WORKTREE] Created isolated git worktree at: {wt_path} (branch: {exp_branch}, base: {base_sha})")
+        provision_static_skills(wt_path, repo_path)
+        print(f"[WORKTREE] Created isolated git worktree at: {wt_path} (branch: {exp_branch}, base: {base_sha}, static skills provisioned)")
     else:
         print(f"[INFO] Target repo '{args.repo}' is not cloned in {repo_path} yet.")
         print(f"       Scaffolded experiment folder only. Clone repo into {repo_path} to spawn worktree.")

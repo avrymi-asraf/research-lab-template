@@ -7,7 +7,7 @@
 * **Execution Timestamp:** `2026-10-28 16:30`
 
 ## 1. Sanity & Guard Run
-* **Guard Command:** `pytest tests/unit -q` -> `42 passed in 3.81s`
+* **Guard Command:** `uv run pytest tests/unit -q` -> `42 passed in 3.81s`
 
 ## 2. Raw Verification Output
 ```json

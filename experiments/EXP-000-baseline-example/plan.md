@@ -13,8 +13,8 @@ editable_scope:
 forbidden_scope:
   - "eval/**"
   - "tests/**"
-guard_cmd: "pytest tests/unit -q"
-verify_cmd: "python3 eval/run_bench.py --output-json"
+guard_cmd: "uv run pytest tests/unit -q"
+verify_cmd: "uv run eval/run_bench.py --output-json"
 primary_metric: "pass_at_1"
 metric_direction: "maximize"
 timeout_sec: 600

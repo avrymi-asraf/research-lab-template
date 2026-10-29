@@ -7,7 +7,7 @@
 * **Execution Timestamp:** `YYYY-MM-DD HH:MM`
 
 ## 1. Sanity & Guard Run
-* **Guard Command:** `pytest tests/unit -q`
+* **Guard Command:** `uv run pytest tests/unit -q`
 * **Guard Output:** [Pass / Fail + details]
 
 ## 2. Technical Adjustments & Debugging Notes

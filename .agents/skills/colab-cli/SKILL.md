@@ -181,7 +181,7 @@ if IN_COLAB:
     if not os.path.exists(REPO_DIR):
         !git clone https://github.com/<owner>/<repo-name>.git {REPO_DIR}
     %cd {REPO_DIR}
-    !pip install -q -e .
+    !uv pip install --system -q -e .
     if REPO_DIR not in sys.path:
         sys.path.insert(0, REPO_DIR)
     

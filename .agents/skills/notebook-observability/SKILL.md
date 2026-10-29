@@ -51,8 +51,8 @@ A good observability notebook should bootstrap itself in a fresh runtime. Clone 
 !git clone https://github.com/your-org/your-repo.git
 %cd your-repo
 
-# 2. Install dependencies quietly (including GitHub-hosted packages)
-%pip install -q "git+https://github.com/huggingface/transformers.git" "accelerate" "pyyaml"
+# 2. Install dependencies quietly with uv (including GitHub-hosted packages)
+!uv pip install --system -q "git+https://github.com/huggingface/transformers.git" "accelerate" "pyyaml"
 
 # 3. Path injection so the kernel prioritizes the cloned source over global packages
 import sys

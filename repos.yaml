@@ -1,13 +1,13 @@
 # Manifest of external repositories managed by this Research Lab
-# Run `python3 scripts/lab.py sync-repos` to clone or fetch all registered targets.
+# Run `uv run scripts/lab.py sync-repos` to clone or fetch all registered targets.
 
 repos:
   - name: example-agent-repo
     url: https://github.com/your-org/example-agent-repo.git
     default_branch: main
     setup_cmd: "uv sync"
-    guard_cmd: "pytest tests/unit -q"
-    verify_cmd: "python3 eval/run_bench.py --output-json"
+    guard_cmd: "uv run pytest tests/unit -q"
+    verify_cmd: "uv run eval/run_bench.py --output-json"
     editable_scope:
       - "src/agents/**"
       - "src/prompts/**"
@@ -19,9 +19,9 @@ repos:
   - name: example-nlp-pipeline
     url: https://github.com/your-org/example-nlp-pipeline.git
     default_branch: main
-    setup_cmd: "pip install -e ."
-    guard_cmd: "pytest tests/ -q"
-    verify_cmd: "python3 scripts/evaluate_f1.py"
+    setup_cmd: "uv sync"
+    guard_cmd: "uv run pytest tests/ -q"
+    verify_cmd: "uv run scripts/evaluate_f1.py"
     editable_scope:
       - "src/modeling/**"
       - "src/retrieval/**"

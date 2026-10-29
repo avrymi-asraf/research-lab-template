@@ -30,14 +30,19 @@ This skill governs how an agent maintains and evolves two categories of files:
 
 The most important decision is: **where does this information belong?**
 
-### Agent Files (Project-Scoped)
-Agent files live in `.opencode/agents/` and are specific to the current project:
-- **Agent file** (`<name>.md`): How the agent behaves — personality, decision-making rules, communication style. General behavioral patterns, not domain knowledge.
-- **Memory file** (`<name>.memory.md`): What happened in this project — completed tasks, project-specific facts, architectural decisions, deployment rules.
-- **Tools file** (`<name>.tools.md`): How tools work in this project — environment quirks, project-specific flags, workflows discovered here.
+### Agent & Memory Files (Project-Scoped)
+Project-scoped operational rules and memory live in the repository's control layer:
+- **In a Research Lab repository (`AGENTS.md` + `wiki-llm/` + `JOURNAL.md`)**:
+  - **Behavior & operational rules**: `AGENTS.md`
+  - **Compiled domain/system/finding knowledge & tool quirks**: `wiki-llm/systems/`, `wiki-llm/findings/`, `wiki-llm/literature/`, and `wiki-llm/gap_map.md`
+  - **Episodic experiment log, baselines, Sparks & Banlist**: `JOURNAL.md` and `experiments/EXP-XXX/`
+- **In a standalone OpenCode project (`.opencode/agents/`)**:
+  - **Agent file** (`<name>.md`): How the agent behaves — personality, decision-making rules, communication style.
+  - **Memory file** (`<name>.memory.md`): What happened in this project — completed tasks, project-specific facts, architectural decisions.
+  - **Tools file** (`<name>.tools.md`): How tools work in this project — environment quirks, project-specific flags, workflows discovered here.
 
-### Skill Files (Concept-Scoped)
-Skills live in `~/dotfiles/skills/` or `.cl/skills/` and are about a **topic or domain**, not a project:
+### Skill Files (Concept-Scoped, Shared via `npx skills`)
+Skills live as a static copy in `.agents/skills/<skill-name>/` within each repository/experiment instance, with relative symlinks in `.claude/skills/<skill-name> -> ../../.agents/skills/<skill-name>`, managed via `npx skills` (`npx skills add`, `npx skills experimental_install`, `npx skills update -p`) and locked in `skills-lock.json`. They are about a **topic or domain**, not a single experiment:
 - The essential knowledge about a concept — what matters, how it works, core patterns.
 - Domain-specific workflows, anti-patterns, and examples.
 - Knowledge that is true regardless of which project you're in.

@@ -23,8 +23,8 @@ updated: 2026-10-28
 * **Tooling:** Python 3.11, `uv`, `pydantic` tool schemas, OpenAI-compatible client (or local vLLM), `pytest`.
 
 ## 2. Evaluation & Guard Harness
-* **Guard Command (`guard_cmd`):** `pytest tests/unit -q` (runs in ~4s, verifies parser, memory, and schema validators).
-* **Verify Command (`verify_cmd`):** `python3 eval/run_bench.py --output-json` (runs 50 multi-step scenarios; outputs `{"pass_at_1": float, "p95_latency_sec": float}`).
+* **Guard Command (`guard_cmd`):** `uv run pytest tests/unit -q` (runs in ~4s, verifies parser, memory, and schema validators).
+* **Verify Command (`verify_cmd`):** `uv run eval/run_bench.py --output-json` (runs 50 multi-step scenarios; outputs `{"pass_at_1": float, "p95_latency_sec": float}`).
 * **Forbidden Paths:** Never edit `eval/**` or `tests/**` during an optimization experiment.
 
 ## 3. Known quirks & Environment Notes

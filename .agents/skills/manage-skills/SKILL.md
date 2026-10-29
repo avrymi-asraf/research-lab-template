@@ -41,12 +41,21 @@ skill-name/
 
 > **References is a folder, not a single file.** Each file inside covers exactly one topic. Do not create a single `reference.md` at the skill root — use `references/<topic>.md` instead.
 
-### Storage Locations
+### Storage Locations & `npx skills` Management
 
-| Type | Path | Scope |
+Skills are managed via `npx skills` and pinned in `skills-lock.json`, ensuring that a **static copy** of every skill is present inside each project and experiment instance in `.agents/skills/` (never fragile symlinks to external user directories like `~/dotfiles/skills/`), while `.claude/skills/` contains relative symlinks to `.agents/skills/`:
+
+| Location | Path | How it is managed |
 |------|------|-------|
-| Personal | ~/dotfiles/skills/skill-name/ | Available across all your projects |
-| Project | .cl/skills/skill-name/ | Shared with anyone using the repository |
+| Canonical static copy | `.agents/skills/<skill-name>/` | Installed/updated via `npx skills add <source>` and locked in `skills-lock.json` |
+| Claude Code symlinks | `.claude/skills/<skill-name>` | Relative symlink (`-> ../../.agents/skills/<skill-name>`) created by `npx skills` |
+| Experiment worktree instance | `.targets/worktrees/<EXP>/.agents/skills/` | Static copy in `.agents/skills/` + symlinks in `.claude/skills/`, managed via `npx skills` / `skills-lock.json` |
+
+Common commands:
+- Install/add a skill (static copy in `.agents/skills/` + symlink in `.claude/skills/`): `npx skills add <owner>/<repo> --skill <name> -y`
+- Restore locked skills from `skills-lock.json` in an instance: `npx skills experimental_install`
+- List installed project skills: `npx skills list`
+- Check and update project skills: `npx skills check` / `npx skills update -p -y`
 
 
 ## SKILL.md Structure
