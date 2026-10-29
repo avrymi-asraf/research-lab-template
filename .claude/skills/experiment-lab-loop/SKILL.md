@@ -43,20 +43,24 @@ Run a disciplined, compounding research loop across external codebases without p
 
 ### Step 2: Ideate & Plan (Architect Role)
 
-1. Cross-check your candidate hypothesis against Section 4 of `JOURNAL.md` (`Anti-Repeat Banlist`) so you never repeat a refuted experiment.
-2. Scaffold the experiment directory and its isolated `git worktree`:
+This step deserves the most thought in the loop. Aim for deep, creative, non-obvious ideas, not the first incremental tweak that comes to mind.
+
+1. **Run a deep ideation pass with the `iterative-deep-researcher` skill:** loop gather → read → think → update on the chosen gap. Search prior art and adjacent fields, ask *why* the bottleneck exists, and keep **≥3 competing hypotheses** alive (at least one contrarian) before you commit. Delegate source gathering to subagents and save paper notes to `wiki-llm/literature/`.
+2. Cross-check your candidate hypothesis against Section 4 of `JOURNAL.md` (`Anti-Repeat Banlist`) so you never repeat a refuted experiment.
+3. Scaffold the experiment directory and its isolated `git worktree`:
    ```bash
    python3 scripts/lab.py new-exp --id EXP-XXX --repo <target-repo> --title "<short-slug>"
    ```
-3. Edit `experiments/EXP-XXX-<short-slug>/plan.md` to specify:
-   - The exact mechanistic hypothesis and linked gap (`G1`, `SPARK-01`).
+4. Edit `experiments/EXP-XXX-<short-slug>/plan.md` to specify:
+   - The exact mechanistic hypothesis and linked gap (`G1`, `SPARK-01`), plus the alternatives you considered and rejected.
+   - **Experiment language:** the experiment uses the same concepts, structure, and mental model as earlier experiments on this repo (see `Experiment Language` in `wiki-llm/systems/<repo>.md`), so a reader of the previous experiment immediately understands this one.
    - `editable_scope` (files the Technician is allowed to edit) and `forbidden_scope` (evaluation scripts and test suites that must remain untouched).
    - `guard_cmd` (fast regression tests) and `verify_cmd` (benchmark command emitting JSON metrics).
 
 ### Step 3: Implement & Verify (Technician Role)
 
-1. Work strictly inside `.targets/worktrees/EXP-XXX-<short-slug>/` following `plan.md`. Do not load unrelated wiki files into context during coding.
-2. Apply one focused, atomic experimental change and commit it to the `exp/EXP-XXX-<short-slug>` branch.
+1. **Delegate implementation to a subagent when available**: give it `plan.md` as the brief and the worktree as its only workspace. The orchestrator reviews the diff and the results and does not write the code itself. In either case, work strictly inside `.targets/worktrees/EXP-XXX-<short-slug>/` following `plan.md`. Do not load unrelated wiki files into context during coding.
+2. Apply one focused, atomic experimental change **in the established experiment language**: reuse the same concepts, names, extension points, and flow as previous experiments, so only the hypothesis differs. Commit it to the `exp/EXP-XXX-<short-slug>` branch.
 3. Execute the mechanical verification harness:
    ```bash
    python3 scripts/lab.py evaluate --exp EXP-XXX
@@ -76,7 +80,7 @@ Run a disciplined, compounding research loop across external codebases without p
    ```bash
    python3 scripts/lab.py record-verdict --exp EXP-XXX --verdict <VERDICT> --metric-delta "<delta>" --summary "<one-line-lesson>"
    ```
-3. Update `wiki-llm/`:
+3. Update `wiki-llm/` (delegate this to a wiki-maintainer subagent when available: hand it `postmortem.md` + `results.json`, then review what it changed):
    - Weave the new empirical finding into `wiki-llm/findings/<topic>.md` and update `wiki-llm/gap_map.md` and `wiki-llm/index.md`.
    - If `HYPOTHESIS_REFUTED`, add the refuted pattern and boundary conditions to `JOURNAL.md` (`Anti-Repeat Banlist`).
 4. Clean up the temporary worktree once `patch.diff` is saved:
@@ -89,3 +93,6 @@ Run a disciplined, compounding research loop across external codebases without p
 - **Anti-Self-Poisoning:** Never log an infrastructure crash, OOM, or typo as a scientific refutation in `wiki-llm/findings/` or the `Anti-Repeat Banlist`. Only clean executions can refute a hypothesis.
 - **Reward Hacking Prevention:** Never modify files in `forbidden_scope` (such as evaluation harnesses or ground-truth test labels) to make a metric go up.
 - **Simplicity Bias:** If an experiment adds 150 lines of complex code for a negligible metric gain within noise, discard it and document the complexity trade-off in `postmortem.md`.
+- **Language Drift:** An experiment that renames concepts, restructures the flow, or adopts a different framework or mental model forces every reader to relearn the system, and its results stop being comparable. Keep the frame fixed and vary only the idea. Change the frame only when that change *is* the hypothesis, and say so explicitly in `plan.md`.
+- **Shallow Ideation:** Jumping straight from the gap to the most obvious tweak produces incremental, often redundant experiments. Spend real effort in Step 2 with `iterative-deep-researcher`.
+- **Context Exhaustion:** An orchestrator that gathers sources, writes code, and edits the wiki in its own context loses the overview it needs to judge results. Delegate those tasks to subagents and keep your own attention for decisions.

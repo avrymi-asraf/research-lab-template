@@ -222,6 +222,13 @@ def cmd_context_pack(_args: argparse.Namespace) -> None:
         sections.append("## 4. Wiki Page Catalog (`index.md`)\n" + index_path.read_text(encoding="utf-8").strip()[:1500])
 
     out_text = "\n\n".join(sections)[:8000] + "\n"
+    # Planning reminders are appended after truncation so they are always present.
+    out_text += (
+        "\n## Planning Reminders\n"
+        "* **Ideate deeply:** use the `iterative-deep-researcher` skill and weigh at least 3 competing hypotheses before choosing one.\n"
+        "* **Same experiment language:** reuse the concepts, structure, and mental model of previous experiments so the next reader instantly follows (`Experiment Language` in `wiki-llm/systems/<repo>.md`).\n"
+        "* **Protect your attention:** delegate source gathering, implementation, and wiki ingestion to subagents, then review what they return.\n"
+    )
     out_path = WIKI_DIR / "query_pack.md"
     out_path.write_text(out_text, encoding="utf-8")
     append_wiki_log("context-pack", "wiki-llm/query_pack.md", f"Compiled context pack ({len(out_text)} chars)")

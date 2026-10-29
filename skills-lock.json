@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-and-skill-improvement": {
+      "source": "avrymi-asraf/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/agent-and-skill-improvement/SKILL.md",
+      "computedHash": "d5a0ccadebd76a2c069b7404cdb52aed3339964fb70724b988200d71efe5f0c2"
+    },
+    "architecture-map": {
+      "source": "avrymi-asraf/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/architecture-map/SKILL.md",
+      "computedHash": "62cd3af20b7ba765fdcec507e8a5e8a6c832dea859b1617f98fabba4938b6dee"
+    },
+    "code-as-tools": {
+      "source": "avrymi-asraf/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/code-as-tools/SKILL.md",
+      "computedHash": "e4093b20e56f3832cc2cbac15a898fbbde636bf930fdcdddf05f1b95cfe41d3f"
+    },
+    "coding-principles": {
+      "source": "avrymi-asraf/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/coding-principles/SKILL.md",
+      "computedHash": "f613c7ff4900ab58e8ce9f1312ccae32e035321b7b56dee3de1cecb110549a8c"
+    },
+    "colab-cli": {
+      "source": "avrymi-asraf/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/colab-cli/SKILL.md",
+      "computedHash": "5aec53da4e76ea78b8557ccf82a5787afc2fc20d382847e772199b0ffa2361da"
+    },
+    "iterative-deep-researcher": {
+      "source": "avrymi-asraf/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/iterative-deep-researcher/SKILL.md",
+      "computedHash": "a3f7003f0c4aa7835ac6d14a54c6bb626cd737d7994317bf43feb7bcd4de5998"
+    },
+    "manage-skills": {
+      "source": "avrymi-asraf/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/manage-skills/SKILL.md",
+      "computedHash": "46f24b89671fb802652125ae0fb6d4838e0408ae8c177422650a7da308ae775c"
+    },
+    "notebook-observability": {
+      "source": "avrymi-asraf/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/notebook-observability/SKILL.md",
+      "computedHash": "54abd47f70c841bc1ec3f46dfa2958a13160c26121261a5da1b90582ac0fc9f9"
+    },
+    "scripts": {
+      "source": "avrymi-asraf/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/scripts/SKILL.md",
+      "computedHash": "e7fc5e2dd1ce808774e851f1876344bb27966beb8da31d4ec07f84e8cf64a2c0"
+    }
+  }
+}

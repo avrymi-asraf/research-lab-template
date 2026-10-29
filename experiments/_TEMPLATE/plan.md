@@ -28,11 +28,14 @@ status: PLANNED
 * **Gap / Spark Addressed:** [Reference `G1` in `wiki-llm/gap_map.md` or `SPARK-XX` in `JOURNAL.md`]
 * **Prior Knowledge:** [What do we already know from `wiki-llm/findings/` and previous experiments?]
 * **Anti-Repeat Check:** [Confirm this does not duplicate a refuted entry in `JOURNAL.md` Banlist]
+* **Ideation Trail (`iterative-deep-researcher`):** [Key sources / prior art consulted, linked to `wiki-llm/literature/` notes]
+* **Alternatives Considered:** [≥3 competing hypotheses, including a non-obvious one, and why this one was chosen. Rejected ideas are candidate Sparks.]
 
 ## 2. Testable Hypothesis
 > **If** we modify [specific component/mechanism in target repo] to [exact change], **then** [primary metric] will improve from [baseline] to at least [target threshold] without degrading [secondary metric / guard suite], **because** [mechanistic reason].
 
 ## 3. Implementation Specification
+* **Experiment Language:** [Which concepts, files, and extension points from `Experiment Language` in `wiki-llm/systems/<repo>.md` this experiment reuses. A reader of the previous experiment should immediately recognise the structure. If the frame itself is the variable under test, state it explicitly here.]
 * **Files to Modify:**
   - `path/to/file.py`: [Exact change description]
 * **Invariants / Constants:** [What stays strictly fixed so the comparison is fair?]
